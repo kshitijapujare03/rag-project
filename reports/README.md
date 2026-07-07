@@ -1,59 +1,101 @@
-This folder contains weekly reports , metrics and final documentation.
+# RAG for Educational Systems - Reports
 
-# Educational RAG Tutor - Project Report
+## API Testing Report (Task 1 - Week 5)
 
-## Overview
+### Test Summary
+| Total Tests | Passed | Failed |
+|-------------|--------|--------|
+| 14 | 14 | 0 |
 
-This project implements a Retrieval-Augmented Generation (RAG) system that allows users to upload educational PDF documents and ask questions based on their content. The system retrieves relevant information from the uploaded documents and generates accurate answers using an AI language model.
+### Test Results
 
-## Features
+#### GET /api/health
+| Test | Expected | Result |
+|------|----------|--------|
+| Status code | 200 | ✅ Pass |
+| Has 'status' field | True | ✅ Pass |
+| Status is 'ok' | True | ✅ Pass |
+| Has 'timestamp' field | True | ✅ Pass |
 
-- Upload educational PDF files
-- Extract and process document text
-- Split text into chunks
-- Generate embeddings for semantic search
-- Retrieve relevant content using cosine similarity
-- Generate context-aware answers using GPT
+#### POST /api/chat (valid request)
+| Test | Expected | Result |
+|------|----------|--------|
+| Status code | 200 | ✅ Pass |
+| Has 'response' field | True | ✅ Pass |
+| Has 'conversation_id' | True | ✅ Pass |
+| Response is not empty | True | ✅ Pass |
 
-## Technologies Used
+#### POST /api/chat (error condition)
+| Test | Expected | Result |
+|------|----------|--------|
+| Status code | 400 | ✅ Pass |
+| Has 'error' field | True | ✅ Pass |
 
-- Python
-- Tkinter
-- NumPy
-- PyPDF
-- OpenAI API
-- text-embedding-3-small
-- GPT-4o Mini
+#### GET /api/history
+| Test | Expected | Result |
+|------|----------|--------|
+| Status code | 200 | ✅ Pass |
+| Has 'history' field | True | ✅ Pass |
+| History is a list | True | ✅ Pass |
 
-## Workflow
+#### GET /api/users
+| Test | Expected | Result |
+|------|----------|--------|
+| Status code | 200 | ✅ Pass |
+| Has 'users' field | True | ✅ Pass |
 
-1. PDF Upload
-2. Text Extraction
-3. Text Chunking
-4. Embedding Generation
-5. Similarity Search
-6. Context Retrieval
-7. Answer Generation
+#### POST /api/feedback (valid)
+| Test | Expected | Result |
+|------|----------|--------|
+| Status code | 201 | ✅ Pass |
+| Has 'message' field | True | ✅ Pass |
 
-## Project Structure
+#### POST /api/feedback (error condition)
+| Test | Expected | Result |
+|------|----------|--------|
+| Status code | 400 | ✅ Pass |
+| Has 'error' field | True | ✅ Pass |
 
-data/
-├── raw/
-├── cleaned/
-└── embeddings/
+## Sequence Diagram
 
-src/
-reports/
-deployment/
+User types question
+↓
+Streamlit Frontend
+↓
+POST /api/chat
+↓
+Flask Backend
+↓
+Google Gemini AI
+↓
+Flask Backend
+↓
+Streamlit Frontend
+↓
+User sees answer
 
-## Outcome
+## API Documentation
 
-The Educational RAG Tutor successfully retrieves relevant information from uploaded documents and generates accurate answers using Retrieval-Augmented Generation (RAG).
+### POST /api/chat
+Request:
+{"prompt": "What is RAG?"}
+Response:
+{"response": "RAG stands for...", "conversation_id": "uuid"}
 
-## Future Improvements
+### GET /api/history
+Response:
+{"history": [...]}
 
-- Multi-PDF support
-- ChromaDB/FAISS integration
-- Voice-based interaction
-- Web deployment
-- Multi-language support
+### GET /api/users
+Response:
+{"users": [...]}
+
+### POST /api/feedback
+Request:
+{"conversation_id": "uuid", "rating": 5, "comment": "helpful!"}
+Response:
+{"message": "Feedback stored"}
+
+### GET /api/health
+Response:
+{"status": "ok", "service": "rag-backend", "timestamp": "..."}
